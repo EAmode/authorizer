@@ -11,14 +11,17 @@
     "radix": true,
     "semicolon": [true, "never"],
     "interface-name": false,
+    "ordered-imports": {
+      "severity": "warning"
+    },
     "trailing-comma": [
       true,
       {
         "multiline": {
           "objects": "never",
-          "arrays": "always",
+          "arrays": "never",
           "functions": "never",
-          "typeLiterals": "ignore"
+          "typeLiterals": "never"
         },
         "singleline": "never"
       }

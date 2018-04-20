@@ -19,20 +19,73 @@ import {
 export interface Policy {
   name?
   selector(resourceType, actionType, subjectType): boolean
-  authorize(request: AuthzRequest, authorizer: Authorizer)
+  authorize(request: AccessRequest, authorizer: Authorizer)
 }
 
-export interface AuthzRequest {
+export interface AccessRequest {
   subject?
-  action?
-  resource?
+  action
+  resource
   environment?
 }
 
+export enum RuleEffect {
+  allow = 'allow',
+  deny = 'deny'
+}
+
+export interface AccessResponse {
+  effect: RuleEffect | string
+  matchedRule?: AccessRule
+  resource?
+}
+
+export interface AccessRule {
+  effect: RuleEffect | string
+  filter?: (resourceType, actionType) => boolean
+  matcher?: (accessRequest: AccessRequest) => boolean
+  mapper?: (resource) => object
+}
 export class Authorizer {
   byOrder = descend(prop('order'))
 
-  constructor(public policies: Policy[] = []) {}
+  constructor(public defaultPolicyChain: AccessRule[] = []) {}
+
+  enforce(accessRequest: AccessRequest, policyChain?: AccessRule[]) {
+    const response = this.applyChain(accessRequest, policyChain)
+    return response.effect === RuleEffect.deny
+      ? this.applyChain(accessRequest, this.defaultPolicyChain)
+      : response
+  }
+
+  private applyChain(accessRequest: AccessRequest, policyChain?: AccessRule[]) {
+    const { subject, action, resource, environment } = accessRequest
+    const response = { effect: RuleEffect.deny } as AccessResponse
+
+    const applicableRules = policyChain
+      ? policyChain.filter(
+          r => (r.filter ? r.filter(resource.type, action.type) : true)
+        )
+      : []
+
+    for (const rule of applicableRules) {
+      const matched = rule.matcher ? rule.matcher(accessRequest) : true
+
+      if (matched) {
+        response.effect = rule.effect
+        response.matchedRule = rule
+        break
+      }
+    }
+
+    if (response.effect === RuleEffect.allow) {
+      response.resource = response.matchedRule.mapper
+        ? response.matchedRule.mapper(resource)
+        : resource
+    }
+
+    return response
+  }
 
   selectorMatch = p => p.selector()
 
@@ -42,31 +95,31 @@ export class Authorizer {
   }
 
   getPolicyFor(resourceType: string, actionType: string, subjectType: string) {
-    const ps = sort<Policy>(this.byOrder, this.policies)
-    const foundPolicies = head(
-      filter(
-        (p: Policy) => p.selector(resourceType, actionType, subjectType),
-        ps
-      )
-    )
-    return foundPolicies
+    // const ps = sort<Policy>(this.byOrder, this.policyChains)
+    // const foundPolicies = head(
+    //   filter(
+    //     (p: Policy) => p.selector(resourceType, actionType, subjectType),
+    //     ps
+    //   )
+    // )
+    // return foundPolicies
   }
 
   authorize(resource, action, subject, environment = {}) {
-    const foundPolicy = this.getPolicyFor(
-      resource.type,
-      action.type,
-      subject.type
-    )
-    if (foundPolicy) {
-      const hasAccess = foundPolicy.authorize(
-        { resource, action, subject, environment },
-        this
-      )
-      return hasAccess ? resource : undefined
-    } else {
-      return resource
-    }
+    // const foundPolicy = this.getPolicyFor(
+    //   resource.type,
+    //   action.type,
+    //   subject.type
+    // )
+    // if (foundPolicy) {
+    //   const hasAccess = foundPolicy.authorize(
+    //     { resource, action, subject, environment },
+    //     this
+    //   )
+    //   return hasAccess ? resource : undefined
+    // } else {
+    //   return resource
+    // }
   }
 
   authorizeEvent(event) {
