@@ -32,23 +32,30 @@ describe('Authorization for ABAC', () => {
     subject: user.admin,
     action: { type: 'read' },
     resource: {
+      type: 'person',
       firstname: 'John',
       lastname: 'Doe',
       ssn: '123456789'
     }
   }
 
+  it('anaymous should only see last 4 digits od SSN', () => {
+    const authz = new Authorizer()
+    const ar = authz.enforce(accessRequest, [{ effect: 'allow', filter: rt => rt ==='person' }])
+    expect(ar.effect).toEqual(RuleEffect.deny)
+  })
+
   it('should not match', () => {
     const defaultRule = { effect: 'allow', matcher: ({resource}) => resource.firstname === 'Doe' }
     const authz = new Authorizer([defaultRule])
-    let ar = authz.enforce(accessRequest)
+    const ar = authz.enforce(accessRequest)
     expect(ar.effect).toEqual(RuleEffect.deny)
   })
 
   it('should match', () => {
     const defaultRule = { effect: 'allow', matcher: ({resource}) => resource.firstname === 'John' }
     const authz = new Authorizer([defaultRule])
-    let ar = authz.enforce(accessRequest)
+    const ar = authz.enforce(accessRequest)
     expect(ar.effect).toEqual(RuleEffect.allow)
   })
 
