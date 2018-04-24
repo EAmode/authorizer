@@ -39,21 +39,38 @@ describe('Authorization for ABAC', () => {
     }
   }
 
-  it('anaymous should only see last 4 digits od SSN', () => {
+  it('anaymous should only see last 4 digits of SSN', () => {
     const authz = new Authorizer()
-    const ar = authz.enforce(accessRequest, [{ effect: 'allow', filter: rt => rt ==='person' }])
-    expect(ar.effect).toEqual(RuleEffect.deny)
+    const ar = authz.enforce(accessRequest, [
+      {
+        effect: 'allow',
+        filter: rt => rt === 'person',
+        mapper: resource => {
+          if (resource.ssn) {
+            resource.ssn = resource.ssn.substr(resource.ssn.length - 4)
+          }
+          return resource
+        }
+      }
+    ])
+    expect(ar.resource.ssn).toEqual('6789')
   })
 
   it('should not match', () => {
-    const defaultRule = { effect: 'allow', matcher: ({resource}) => resource.firstname === 'Doe' }
+    const defaultRule = {
+      effect: 'allow',
+      matcher: ({ resource }) => resource.firstname === 'Doe'
+    }
     const authz = new Authorizer([defaultRule])
     const ar = authz.enforce(accessRequest)
     expect(ar.effect).toEqual(RuleEffect.deny)
   })
 
   it('should match', () => {
-    const defaultRule = { effect: 'allow', matcher: ({resource}) => resource.firstname === 'John' }
+    const defaultRule = {
+      effect: 'allow',
+      matcher: ({ resource }) => resource.firstname === 'John'
+    }
     const authz = new Authorizer([defaultRule])
     const ar = authz.enforce(accessRequest)
     expect(ar.effect).toEqual(RuleEffect.allow)
