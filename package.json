@@ -2,7 +2,9 @@
   "name": "authorizer",
   "version": "1.0.0",
   "description": "Athorizes requests to resources",
-  "main": "index.js",
+  "main": "dist/authorizer.umd.js",
+  "module": "dist/authorizer.js",
+  "typings": "dist/types/authorizer.d.ts",
   "scripts": {
     "pretest": "npm run build:test",
     "test": "jasmine \"dist/test/spec/**/*.js\"",
