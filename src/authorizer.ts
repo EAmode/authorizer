@@ -1,26 +1,10 @@
-import {
-  any,
-  apply,
-  ascend,
-  contains,
-  descend,
-  equals,
-  filter,
-  find,
-  head,
-  map,
-  path,
-  pickAll,
-  prop,
-  sort,
-  where
-} from 'ramda'
+import { contains, path } from 'ramda'
 
-export interface Policy {
-  name?
-  selector(resourceType, actionType, subjectType): boolean
-  authorize(request: AccessRequest, authorizer: Authorizer)
-}
+// export interface Policy {
+//   name?
+//   selector(resourceType, actionType, subjectType): boolean
+//   authorize(request: AccessRequest, authorizer: Authorizer)
+// }
 
 export interface AccessRequest {
   subject?
@@ -43,12 +27,10 @@ export interface AccessResponse {
 export interface AccessRule {
   effect: RuleEffect | string
   filter?: (resourceType, actionType) => boolean
-  matcher?: (accessRequest: AccessRequest) => boolean
+  matcher?: (accessRequest: AccessRequest, authz?: Authorizer) => boolean
   mapper?: (resource) => object
 }
 export class Authorizer {
-  byOrder = descend(prop('order'))
-
   constructor(public defaultPolicyChain: AccessRule[] = []) {}
 
   enforce(accessRequest: AccessRequest, policyChain?: AccessRule[]) {
@@ -56,6 +38,18 @@ export class Authorizer {
     return response.effect === RuleEffect.deny
       ? this.applyChain(accessRequest, this.defaultPolicyChain)
       : response
+  }
+
+  contains(obj, objPath, match) {
+    if (typeof objPath === 'string' || objPath instanceof String){
+      objPath = Array.of(objPath)
+    }
+    try {
+      const result = contains(match, path(objPath, obj))
+      return result
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   private applyChain(accessRequest: AccessRequest, policyChain?: AccessRule[]) {
@@ -69,7 +63,7 @@ export class Authorizer {
       : []
 
     for (const rule of applicableRules) {
-      const matched = rule.matcher ? rule.matcher(accessRequest) : true
+      const matched = rule.matcher ? rule.matcher(accessRequest, this) : true
 
       if (matched) {
         response.effect = rule.effect
@@ -86,5 +80,4 @@ export class Authorizer {
 
     return response
   }
-
 }
