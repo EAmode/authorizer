@@ -11,6 +11,9 @@
       "preLaunchTask": "npm: build:test",
       "timeout": 1000,
       "program": "${workspaceRoot}/node_modules/jasmine/bin/jasmine",
+      "args": [
+        
+      ],
       "cwd": "${workspaceRoot}/dist/test",
       "outFiles": ["${workspaceFolder}/dist/test/**/*.js"],
       "sourceMaps": true,

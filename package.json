@@ -8,12 +8,13 @@
   "scripts": {
     "pretest": "npm run build:test",
     "test": "jasmine \"dist/test/spec/**/*.js\"",
-    "build:test": "rimraf dist/test && tsc -p tsconfig.spec.json && cpx \"spec/**/*.json\" dist/test/spec",
+    "build:test": "tsc -p tsconfig.spec.json && cpx \"spec/**/*.json\" dist/test/spec",
     "format": "prettier --write **/*.ts",
     "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
     "build": "tsc && rollup -c && rollup -c -o dist/authorizer.umd.js -f umd -n authorizer --sourcemap",
-    "start": "tsc-watch --onSuccess \"rollup -c\""
+    "start": "tsc-watch --onSuccess \"rollup -c\"",
+    "clean": "rimraf dist"
   },
   "private": true,
   "repository": {

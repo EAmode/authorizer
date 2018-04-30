@@ -2,7 +2,6 @@ import {
   AccessRequest,
   AccessRule,
   Authorizer,
-  Policy,
   RuleEffect
 } from '../src/authorizer'
 
@@ -10,6 +9,7 @@ describe('Authorization for ABAC', () => {
   const user = {
     anonymous: null,
     admin: {
+      name: 'Admin',
       connections: {
         memberOf: [{ key: 'group::modeadmin', type: 'organization' }]
       }
@@ -39,7 +39,27 @@ describe('Authorization for ABAC', () => {
     }
   }
 
-  it('anaymous should only see last 4 digits of SSN', () => {
+  it('should match with contains', () => {
+    const authz = new Authorizer()
+    let ar = authz.enforce(accessRequest, [
+      {
+        effect: 'allow',
+        matcher: ({subject}, a) => a.contains(subject, 'name', 'Admin')
+      }
+    ])
+    expect(ar.effect).toEqual('allow')
+
+    ar = authz.enforce(accessRequest, [
+      {
+        effect: 'allow',
+        matcher: ({subject}, a) => a.contains(subject, ['name'], 'Not the name')
+      }
+    ])
+    expect(ar.effect).toEqual('deny')
+
+  })
+
+  it('anonymous should only see last 4 digits of SSN', () => {
     const authz = new Authorizer()
     const ar = authz.enforce(accessRequest, [
       {
