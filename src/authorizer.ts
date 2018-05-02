@@ -1,4 +1,4 @@
-import { contains, path } from 'ramda'
+import { contains, path, propEq, find, whereEq, is } from 'ramda'
 
 // export interface Policy {
 //   name?
@@ -41,14 +41,15 @@ export class Authorizer {
   }
 
   contains(obj, objPath, match) {
-    if (typeof objPath === 'string' || objPath instanceof String){
+    if (is(String, objPath)) {
       objPath = Array.of(objPath)
     }
-    try {
-      const result = contains(match, path(objPath, obj))
-      return result
-    } catch (error) {
-      console.log(error)
+    const p = path(objPath, obj) as any
+    if (is(Array, p)) {
+      const result = find(whereEq(match), p)
+      return !!result
+    } else {
+      return contains(match, p)
     }
   }
 

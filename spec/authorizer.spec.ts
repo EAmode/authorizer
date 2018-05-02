@@ -10,7 +10,7 @@ describe('Authorization for ABAC', () => {
     anonymous: null,
     admin: {
       name: 'Admin',
-      connections: {
+      connectionsTo: {
         memberOf: [{ key: 'group::modeadmin', type: 'organization' }]
       }
     },
@@ -41,10 +41,14 @@ describe('Authorization for ABAC', () => {
 
   it('should match with contains', () => {
     const authz = new Authorizer()
+
     let ar = authz.enforce(accessRequest, [
       {
         effect: 'allow',
-        matcher: ({subject}, a) => a.contains(subject, 'name', 'Admin')
+        matcher: ({ subject }, a) =>
+          a.contains(subject, ['connectionsTo', 'memberOf'], {
+            key: 'group::modeadmin'
+          })
       }
     ])
     expect(ar.effect).toEqual('allow')
@@ -52,11 +56,19 @@ describe('Authorization for ABAC', () => {
     ar = authz.enforce(accessRequest, [
       {
         effect: 'allow',
-        matcher: ({subject}, a) => a.contains(subject, ['name'], 'Not the name')
+        matcher: ({ subject }, a) => a.contains(subject, 'name', 'Admin')
+      }
+    ])
+    expect(ar.effect).toEqual('allow')
+
+    ar = authz.enforce(accessRequest, [
+      {
+        effect: 'allow',
+        matcher: ({ subject }, a) =>
+          a.contains(subject, ['name'], 'Not the name')
       }
     ])
     expect(ar.effect).toEqual('deny')
-
   })
 
   it('anonymous should only see last 4 digits of SSN', () => {
