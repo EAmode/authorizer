@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/eascientific/authorizer#readme",
   "dependencies": {
-    "cytoscape": "^3.2.11"
+    "cytoscape": "^3.2.15"
   },
   "prettier": {
     "semi": false,
@@ -36,19 +36,19 @@
     "printWidth": 80
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.6",
-    "@types/ramda": "^0.25.23",
+    "@types/jasmine": "^2.8.8",
+    "@types/ramda": "^0.25.35",
     "cpx": "^1.5.0",
     "jasmine": "^3.1.0",
     "jasmine-core": "^3.1.0",
-    "prettier": "^1.12.1",
+    "prettier": "^1.13.7",
     "ramda": "^0.25.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.58.1",
-    "rollup-plugin-commonjs": "^9.1.0",
-    "rollup-plugin-json": "^2.3.0",
+    "rollup": "^0.63.4",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-json": "^3.0.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
-    "rxjs": "^5.5.10"
+    "rxjs": "^6.2.2"
   }
 }

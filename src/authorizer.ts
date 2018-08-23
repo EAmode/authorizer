@@ -14,9 +14,9 @@ export interface AccessRequest {
 }
 
 export enum RuleEffect {
+}
   allow = 'allow',
   deny = 'deny'
-}
 
 export interface AccessResponse {
   effect: RuleEffect | string
