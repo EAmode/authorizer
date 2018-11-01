@@ -1,4 +1,4 @@
-import { contains, path, propEq, find, whereEq, is } from 'ramda'
+import { contains, find, is, path, whereEq } from 'ramda'
 
 // export interface Policy {
 //   name?
