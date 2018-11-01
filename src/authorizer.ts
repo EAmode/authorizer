@@ -40,7 +40,7 @@ export class Authorizer {
       : response
   }
 
-  contains(obj, objPath, match) {
+  contains(obj, objPath, match): boolean {
     if (is(String, objPath)) {
       objPath = Array.of(objPath)
     }
@@ -49,7 +49,7 @@ export class Authorizer {
       const result = find(whereEq(match), p)
       return !!result
     } else {
-      return contains(match, p)
+      return contains(match, [p])
     }
   }
 
