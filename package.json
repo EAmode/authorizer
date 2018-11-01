@@ -13,6 +13,7 @@
     "test": "jasmine \"dist/test/spec/**/*.js\"",
     "build:test": "tsc -p tsconfig.spec.json && cpx \"spec/**/*.json\" dist/test/spec",
     "format": "prettier --write **/*.ts",
+    "commit": "npx git-cz",
     "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
     "build": "tsc && rollup -c && rollup -c -o dist/authorizer.umd.js -f umd -n authorizer --sourcemap",
@@ -36,6 +37,24 @@
     "singleQuote": true,
     "printWidth": 80
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format && lint-staged",
+      "pre-push": "npm test && npm run build",
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "lint-staged": {
+    "{src,spec}/**/*.ts": [
+      "tslint -t codeFrame",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "dependencies": {
     "cytoscape": "^3.2.16"
   },
@@ -43,9 +62,11 @@
     "@types/jasmine": "^2.8.8",
     "@types/ramda": "^0.25.38",
     "cpx": "^1.5.0",
+    "cz-conventional-changelog": "^2.1.0",
     "husky": "^1.1.2",
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.2.1",
+    "lint-staged": "^8.0.4",
     "prettier": "^1.14.2",
     "ramda": "^0.25.0",
     "rimraf": "^2.6.2",
@@ -55,8 +76,9 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rxjs": "^6.3.2",
-    "typescript": "^3.0.3",
     "semantic-release": "^15.10.6",
-    "travis-deploy-once": "^5.0.9"
+    "travis-deploy-once": "^5.0.9",
+    "typescript": "^3.0.3",
+    "validate-commit-msg": "^2.14.0"
   }
 }
