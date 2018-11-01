@@ -1,10 +1,13 @@
 {
-  "name": "authorizer",
+  "name": "@eamode/authorizer",
   "version": "1.0.0",
-  "description": "Athorizes requests to resources",
+  "description": "Authorizes requests to resources",
   "main": "dist/authorizer.umd.js",
   "module": "dist/authorizer.js",
   "typings": "dist/types/authorizer.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "pretest": "npm run build:test",
     "test": "jasmine \"dist/test/spec/**/*.js\"",
@@ -16,7 +19,6 @@
     "start": "tsc-watch --onSuccess \"rollup -c\"",
     "clean": "rimraf dist"
   },
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EAmode/authorizer.git"
@@ -27,18 +29,25 @@
     "url": "https://github.com/EAmode/authorizer/issues"
   },
   "homepage": "https://github.com/EAmode/authorizer#readme",
-  "dependencies": {
-    "cytoscape": "^3.2.16"
-  },
   "prettier": {
     "semi": false,
     "singleQuote": true,
     "printWidth": 80
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format",
+      "pre-push": "npm run test && npm run build"
+    }
+  },
+  "dependencies": {
+    "cytoscape": "^3.2.16"
+  },
   "devDependencies": {
     "@types/jasmine": "^2.8.8",
     "@types/ramda": "^0.25.38",
     "cpx": "^1.5.0",
+    "husky": "^1.1.2",
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.2.1",
     "prettier": "^1.14.2",
@@ -50,6 +59,7 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rxjs": "^6.3.2",
+    "semantic-release": "^15.10.6",
     "typescript": "^3.0.3"
   }
 }
