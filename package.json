@@ -1,6 +1,6 @@
 {
   "name": "@eamode/authorizer",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Authorizes requests to resources",
   "main": "dist/authorizer.umd.js",
   "module": "dist/authorizer.js",
@@ -17,11 +17,13 @@
     "prebuild": "rimraf dist",
     "build": "tsc && rollup -c && rollup -c -o dist/authorizer.umd.js -f umd -n authorizer --sourcemap",
     "start": "tsc-watch --onSuccess \"rollup -c\"",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EAmode/authorizer.git"
+    "url": "https://github.com/EAmode/authorizer.git"
   },
   "author": "",
   "license": "ISC",
@@ -33,12 +35,6 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 80
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format",
-      "pre-push": "npm run test && npm run build"
-    }
   },
   "dependencies": {
     "cytoscape": "^3.2.16"
@@ -59,7 +55,8 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rxjs": "^6.3.2",
+    "typescript": "^3.0.3",
     "semantic-release": "^15.10.6",
-    "typescript": "^3.0.3"
+    "travis-deploy-once": "^5.0.9"
   }
 }
