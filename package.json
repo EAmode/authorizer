@@ -45,8 +45,7 @@
   },
   "lint-staged": {
     "{src,spec}/**/*.ts": [
-      "tslint -t codeFrame",
-      "git add"
+      "tslint -t codeFrame"
     ]
   },
   "devDependencies": {
