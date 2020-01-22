@@ -19,14 +19,13 @@
     "build": "tsc && rollup -c && rollup -c -o dist/authorizer.umd.js -f umd -n authorizer --sourcemap",
     "start": "tsc-watch --onSuccess \"rollup -c\"",
     "clean": "rimraf dist",
-    "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once"
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/EAmode/authorizer.git"
   },
-  "author": "",
+  "author": "EA Mode",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/EAmode/authorizer/issues"
@@ -50,18 +49,12 @@
       "git add"
     ]
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@types/jasmine": "^3.5.1",
     "@types/ramda": "^0.26.40",
     "copyfiles": "^2.2.0",
-    "cz-conventional-changelog": "^3.0.2",
     "husky": "^4.2.0",
     "jasmine": "^3.5.0",
     "jasmine-core": "^3.5.0",
