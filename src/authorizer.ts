@@ -58,8 +58,8 @@ export class Authorizer {
     const response = { effect: RuleEffect.deny } as AccessResponse
 
     const applicableRules = policyChain
-      ? policyChain.filter(
-          r => (r.filter ? r.filter(resource.type, action.type) : true)
+      ? policyChain.filter(r =>
+          r.filter ? r.filter(resource.type, action.type) : true
         )
       : []
 

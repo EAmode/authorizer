@@ -11,7 +11,7 @@
   "scripts": {
     "pretest": "npm run build:test",
     "test": "jasmine \"dist/test/spec/**/*.js\"",
-    "build:test": "tsc -p tsconfig.spec.json && cpx \"spec/**/*.json\" dist/test/spec",
+    "build:test": "tsc -p tsconfig.spec.json && copyfiles \"spec/**/*.json\" dist/test/spec",
     "format": "prettier --write src/**/*.ts spec/**/*.ts",
     "commit": "npx git-cz",
     "lint": "tslint -t codeFrame 'src/**/*.ts' 'spec/**/*.ts'",
@@ -41,7 +41,7 @@
     "hooks": {
       "pre-commit": "npm run format && lint-staged",
       "pre-push": "npm test && npm run build",
-      "commit-msg": "validate-commit-msg"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
@@ -56,27 +56,29 @@
     }
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.9",
-    "@types/ramda": "^0.26.0",
-    "cpx": "^1.5.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "husky": "^1.1.3",
-    "jasmine": "^3.3.0",
-    "jasmine-core": "^3.3.0",
-    "lint-staged": "^8.0.4",
-    "prettier": "^1.14.3",
-    "ramda": "^0.25.0",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.66.6",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rxjs": "^6.3.3",
-    "semantic-release": "^15.10.6",
-    "travis-deploy-once": "^5.0.9",
-    "typescript": "^3.1.6",
-    "validate-commit-msg": "^2.14.0"
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@types/jasmine": "^3.5.1",
+    "@types/ramda": "^0.26.40",
+    "copyfiles": "^2.2.0",
+    "cz-conventional-changelog": "^3.0.2",
+    "husky": "^4.2.0",
+    "jasmine": "^3.5.0",
+    "jasmine-core": "^3.5.0",
+    "lint-staged": "^10.0.2",
+    "prettier": "^1.19.1",
+    "ramda": "^0.26.1",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.29.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.5.0",
+    "rxjs": "^6.5.4",
+    "semantic-release": "^16.0.2",
+    "travis-deploy-once": "^5.0.11",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
   },
   "dependencies": {}
 }
